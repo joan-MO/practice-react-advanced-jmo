@@ -1,20 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import Root from './components/app/Root';
+
 
 import { configureClient } from './api/client';
 import storage from './utils/storage';
+import configureStore from './store';
+
 import './index.css';
-import App from './components/app';
 
 const accessToken = storage.get('auth');
 configureClient({ accessToken });
+const history = createBrowserHistory();
 
-ReactDOM.render(
-  <React.StrictMode>
-    <Router>
-      <App isInitiallyLogged={!!accessToken} />
-    </Router>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const store = configureStore({
+  preloadedState: { auth: !!accessToken },
+  history,
+});
+
+const render = () => {
+  ReactDOM.render(
+    <Root store={store} history={history} />,
+    document.getElementById('root'),
+  );
+};
+
+render();

@@ -4,7 +4,7 @@ import { loginAction } from '../../../store/actions';
 import usePromise from '../../../hooks/usePromise';
 import LoginForm from './LoginForm';
 
-function LoginPage({ location, history }) {
+function LoginPage() {
   const { isPending: isLoading, error, execute, resetError } = usePromise();
   const dispatch = useDispatch();
   const handleSubmit = credentials => {

@@ -1,14 +1,20 @@
-import { Redirect, Route, useLocation } from 'react-router-dom';
-import { useAuthContext } from '../context';
+import React from 'react';
+import { Redirect, Route} from 'react-router-dom';
+
+import { useSelector } from 'react-redux';
+import { getIsLogged } from '../../../store/selectors';
+
 
 const PrivateRoute = props => {
-  const { isLogged } = useAuthContext();
-  const location = useLocation();
-
+  const isLogged  = useSelector(getIsLogged);
   return isLogged ? (
     <Route {...props} />
   ) : (
-    <Redirect to={{ pathname: '/login', state: { from: location } }} />
+    <Route>
+      {({ location }) => (
+      <Redirect to={{ pathname: '/login', state: { from: location } }} />
+      )}
+    </Route>
   );
 };
 
