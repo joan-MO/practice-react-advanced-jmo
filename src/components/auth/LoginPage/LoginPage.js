@@ -1,22 +1,14 @@
 import React from 'react';
-import T from 'prop-types';
-
-import { useAuthContext } from '../context';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginAction } from '../../../store/actions';
 import usePromise from '../../../hooks/usePromise';
-import { login } from '../../../api/auth';
 import LoginForm from './LoginForm';
 
 function LoginPage({ location, history }) {
-  const { handleLogin } = useAuthContext();
   const { isPending: isLoading, error, execute, resetError } = usePromise();
-
+  const dispatch = useDispatch();
   const handleSubmit = credentials => {
-    execute(login(credentials))
-      .then(handleLogin)
-      .then(() => {
-        const { from } = location.state || { from: { pathname: '/' } };
-        history.replace(from);
-      });
+    dispatch(loginAction(credentials));
   };
 
   return (
@@ -31,11 +23,5 @@ function LoginPage({ location, history }) {
     </div>
   );
 }
-
-LoginPage.propTypes = {
-  location: T.shape({ state: T.shape({ from: T.object.isRequired }) })
-    .isRequired,
-  history: T.shape({ replace: T.func.isRequired }).isRequired,
-};
 
 export default LoginPage;
