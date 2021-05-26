@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginAction } from '../../../store/actions';
 import usePromise from '../../../hooks/usePromise';
 import LoginForm from './LoginForm';
+import { getUi } from '../../../store/selectors'
 
 function LoginPage() {
-  const { isPending: isLoading, error, execute, resetError } = usePromise();
+  const { isPending: isLoading, resetError } = usePromise();
   const dispatch = useDispatch();
+  const { error } = useSelector(getUi);
   const handleSubmit = credentials => {
     dispatch(loginAction(credentials));
   };

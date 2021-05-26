@@ -7,8 +7,8 @@ import AdvertsList from './AdvertsList';
 import EmptyList from './EmptyList';
 import storage from '../../../utils/storage';
 import { defaultFilters, filterAdverts } from './filters';
-import usePromise from '../../../hooks/usePromise';
 
+import { getUi } from '../../../store/selectors'
 import { advertsLoadAction } from '../../../store/actions';
 import { getAdverts } from '../../../store/selectors';
 
@@ -16,13 +16,12 @@ const getFilters = () => storage.get('filters') || defaultFilters;
 const saveFilters = filters => storage.set('filters', filters);
 
 function AdvertsPage() {
-  const { isPending: isLoading, error, execute} = usePromise(
-    []
-  );
+ 
   const [filters, setFilters] = React.useState(getFilters);
 
   const dispatch = useDispatch();
-  const adverts = useSelector(getAdverts)
+  const adverts = useSelector(getAdverts);
+  const { error } = useSelector(getUi);
 
   React.useEffect(() => {
     dispatch(advertsLoadAction());

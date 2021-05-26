@@ -1,10 +1,12 @@
 import {
-    ADVERTS_LOADED_REQUEST,
-    ADVERTS_LOADED_SUCCESS,
     AUTH_LOGIN_REQUEST,
     AUTH_LOGIN_SUCCESS,
-    // AUTH_LOGIN_FAILURE,
     AUTH_LOGOUT,
+    ADVERTS_LOADED_REQUEST,
+    ADVERTS_LOADED_SUCCESS,
+    ADVERTS_DETAIL_SUCCESS,
+    ADVERTS_CREATED_REQUEST,
+    ADVERTS_CREATED_SUCCESS,
   } from './types';
   
   export const initialState = {
@@ -34,9 +36,9 @@ import {
     switch (action.type) {
       case ADVERTS_LOADED_SUCCESS:
         return { ...state, loaded: true, data: action.payload };
-      //case TWEETS_CREATED_SUCCESS:
-      //case TWEETS_DETAIL_SUCCESS:
-        //return { ...state, loaded: false, data: [...state.data, action.payload] };
+      case ADVERTS_CREATED_SUCCESS:
+      case ADVERTS_DETAIL_SUCCESS:
+        return { ...state, loaded: false, data: [...state.data, action.payload] };
       default:
         return state;
     }
@@ -50,9 +52,12 @@ import {
     switch (action.type) {
       case AUTH_LOGIN_REQUEST:
       case ADVERTS_LOADED_REQUEST:
+      case ADVERTS_CREATED_REQUEST:
         return { ...state, loading: true, error: null };
       case AUTH_LOGIN_SUCCESS:
       case ADVERTS_LOADED_SUCCESS:
+      case ADVERTS_DETAIL_SUCCESS:
+      case ADVERTS_CREATED_SUCCESS:
         return { ...state, loading: false };
       default:
         return state;
