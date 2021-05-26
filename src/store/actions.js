@@ -1,4 +1,4 @@
-import { getAdvertsLoaded, getAdvert } from './selectors';
+import { getAdvertsLoaded, getAdvert, getTagsLoaded } from './selectors';
 import {
     AUTH_LOGIN_REQUEST,
     AUTH_LOGIN_SUCCESS,
@@ -13,7 +13,10 @@ import {
     ADVERTS_CREATED_ERROR,
     ADVERTS_DELETED_REQUEST,
     ADVERTS_DELETED_SUCCESS,
-    ADVERTS_DELETED_ERROR
+    ADVERTS_DELETED_ERROR,
+    TAGS_LOADED_REQUEST,
+    TAGS_LOADED_SUCCESS,
+    TAGS_LOADED_ERROR
   } from './types';
   
 
@@ -195,3 +198,43 @@ export const advertsLoadedRequest = () => {
       }
     }
   }
+
+  // tags
+
+  export const tagsLoadedRequest = () => {
+    return {
+      type: TAGS_LOADED_REQUEST,
+    };
+  };
+  
+  export const tagsLoadedSuccess = tags => {
+    return {
+      type: TAGS_LOADED_SUCCESS,
+      payload: tags,
+    };
+  };
+  
+  export const tagsLoadedError = error => {
+    return {
+      type: TAGS_LOADED_ERROR,
+      payload: error,
+      error: true,
+    };
+  };
+  
+  export const tagsLoadAction = () => {
+    return async function (dispatch, getState, { api }) {
+      const tagsLoaded = getTagsLoaded(getState());
+      if (tagsLoaded) {
+        return;
+      }
+      dispatch(tagsLoadedRequest());
+      try {
+        const tags = await api.adverts.getTags();
+        dispatch(tagsLoadedSuccess(tags));
+      } catch (error) {
+        dispatch(tagsLoadedError(error));
+      }
+    };
+  };
+  

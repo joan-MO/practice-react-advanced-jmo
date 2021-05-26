@@ -9,10 +9,11 @@ export const getAdverts = state =>
 export const getAdvertsLoaded = state => state.adverts.loaded;
 
 export const getAdvert = (state, advertId) => {
-  //console.log(state.adverts.data.find(advert => advert.id === advertId));
   return state.adverts.data.find(advert => advert.id === advertId)
-  
 } 
 
+export const getTagsLoaded = state => state.tags.loaded;
 
-export const getUi = state => state.ui
+export const getTags = state => state.tags.data;
+
+export const getUi = state => state.ui;

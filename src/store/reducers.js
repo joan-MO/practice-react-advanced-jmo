@@ -9,6 +9,8 @@ import {
     ADVERTS_CREATED_SUCCESS,
     ADVERTS_DELETED_REQUEST,
     ADVERTS_DELETED_SUCCESS,
+    TAGS_LOADED_SUCCESS,
+    TAGS_LOADED_REQUEST,
   } from './types';
   
   export const initialState = {
@@ -16,6 +18,10 @@ import {
     adverts: {
       loaded: false,
       data: [],
+    },
+    tags: {
+      loaded: false,
+      data: []
     },
     ui: {
       loading: false,
@@ -46,6 +52,15 @@ import {
         return state;
     }
   }
+
+  export function tags(state = initialState.tags, action) {
+    switch (action.type) {
+      case TAGS_LOADED_SUCCESS:
+        return { ...state, loaded: true, data: action.payload };
+      default:
+        return state;
+    }
+  }
   
 
   export function ui(state = initialState.ui, action) {
@@ -57,12 +72,14 @@ import {
       case ADVERTS_LOADED_REQUEST:
       case ADVERTS_CREATED_REQUEST:
       case ADVERTS_DELETED_REQUEST:
+      case TAGS_LOADED_REQUEST:
         return { ...state, loading: true, error: null };
       case AUTH_LOGIN_SUCCESS:
       case ADVERTS_LOADED_SUCCESS:
       case ADVERTS_DETAIL_SUCCESS:
       case ADVERTS_CREATED_SUCCESS:
       case ADVERTS_DELETED_SUCCESS:
+      case TAGS_LOADED_SUCCESS:
         return { ...state, loading: false };
       default:
         return state;
