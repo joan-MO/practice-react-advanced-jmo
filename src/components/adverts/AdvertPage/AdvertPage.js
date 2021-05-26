@@ -7,7 +7,7 @@ import {deleteAdvert } from '../../../api/adverts';
 import usePromise from '../../../hooks/usePromise';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAdvert } from '../../../store/selectors';
-import { advertsDetailAction } from '../../../store/actions';
+import { advertsDeletedAction, advertsDetailAction } from '../../../store/actions';
 
 function AdvertPage() {
   const { advertId } = useParams();
@@ -25,7 +25,7 @@ function AdvertPage() {
   }, [advertId]);
 
   const handleDelete = () => {
-    execute(deleteAdvert(advertId)).then(() => history.push('/'));
+    dispatch(advertsDeletedAction(advertId));
   };
 
   if (error?.statusCode === 401) {

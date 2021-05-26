@@ -7,6 +7,8 @@ import {
     ADVERTS_DETAIL_SUCCESS,
     ADVERTS_CREATED_REQUEST,
     ADVERTS_CREATED_SUCCESS,
+    ADVERTS_DELETED_REQUEST,
+    ADVERTS_DELETED_SUCCESS,
   } from './types';
   
   export const initialState = {
@@ -24,6 +26,7 @@ import {
   export function auth(state = initialState.auth, action) {
     switch (action.type) {
       case AUTH_LOGIN_SUCCESS:
+      case ADVERTS_DELETED_SUCCESS:
         return true;
       case AUTH_LOGOUT:
         return false;
@@ -53,11 +56,13 @@ import {
       case AUTH_LOGIN_REQUEST:
       case ADVERTS_LOADED_REQUEST:
       case ADVERTS_CREATED_REQUEST:
+      case ADVERTS_DELETED_REQUEST:
         return { ...state, loading: true, error: null };
       case AUTH_LOGIN_SUCCESS:
       case ADVERTS_LOADED_SUCCESS:
       case ADVERTS_DETAIL_SUCCESS:
       case ADVERTS_CREATED_SUCCESS:
+      case ADVERTS_DELETED_SUCCESS:
         return { ...state, loading: false };
       default:
         return state;

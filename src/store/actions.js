@@ -10,7 +10,10 @@ import {
     ADVERTS_DETAIL_SUCCESS,
     ADVERTS_CREATED_REQUEST,
     ADVERTS_CREATED_SUCCESS,
-    ADVERTS_CREATED_ERROR
+    ADVERTS_CREATED_ERROR,
+    ADVERTS_DELETED_REQUEST,
+    ADVERTS_DELETED_SUCCESS,
+    ADVERTS_DELETED_ERROR
   } from './types';
   
 
@@ -46,7 +49,7 @@ export const loginAction = credentials => {
           const { from } = history.location.state || { from: { pathname: '/' } };
           history.replace(from);
         } catch (error) {
-          console.log(error);
+          dispatch(authLoginError(error));
         }
     }   
 }
@@ -158,5 +161,37 @@ export const advertsLoadedRequest = () => {
       }
     };
   };
+
+  export const advertsDeletedRequest = () => {
+    return {
+      type: ADVERTS_DELETED_REQUEST,
+    };
+  };
   
+  export const advertsDeletedSuccess = () => {
+    return {
+      type: ADVERTS_DELETED_SUCCESS,
+    };
+  };
   
+  export const advertsDeletedError = error => {
+    return {
+      type: ADVERTS_DELETED_ERROR,
+      payload: error,
+      error: true,
+    };
+  };
+  
+  export const advertsDeletedAction = advertId => {
+    return async function (dispatch, getState, {api, history}) {
+      dispatch(advertsDeletedRequest())
+      try {
+        await api.adverts.deleteAdvert(advertId);
+        dispatch(advertsDeletedSuccess());
+        const { from } = history.location.state || { from: { pathname: '/' } };
+        history.replace(from);
+      } catch (error) {
+        dispatch(advertsDeletedError(error));
+      }
+    }
+  }
