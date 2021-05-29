@@ -16,7 +16,9 @@ import {
     ADVERTS_DELETED_ERROR,
     TAGS_LOADED_REQUEST,
     TAGS_LOADED_SUCCESS,
-    TAGS_LOADED_ERROR
+    TAGS_LOADED_ERROR,
+    ADVERTS_DETAIL_REQUEST,
+    ADVERTS_DETAIL_ERROR
   } from './types';
   
 
@@ -45,8 +47,6 @@ export const loginAction = credentials => {
     return async function (dispatch, getState, { api, history }) {
         dispatch(authLoginRequest());
         try {
-          console.log(credentials);
-          console.log(api);
           await api.auth.login(credentials);
           dispatch(authLoginSuccess());
           const { from } = history.location.state || { from: { pathname: '/' } };
@@ -67,7 +67,7 @@ export const advertsLoadedRequest = () => {
     return {
       type: ADVERTS_LOADED_REQUEST,
     };
-  };
+};
   
   export const advertsLoadedSuccess = adverts => {
     return {
@@ -101,6 +101,11 @@ export const advertsLoadedRequest = () => {
     };
   };
   
+  export const advertsDetailRequest = () => {
+    return {
+      type: ADVERTS_DETAIL_REQUEST,
+    };
+  };
 
   export const advertsDetailSuccess = advert => {
     return {
@@ -108,22 +113,31 @@ export const advertsLoadedRequest = () => {
       payload: advert,
     };
   };
+
+  export const advertsDetailError = error => {
+    return {
+      type: ADVERTS_DETAIL_ERROR,
+      payload: error,
+      error: true,
+    };
+  };
+
   
   export const advertsDetailAction = advertId => {
     return async function (dispatch, getState, { api, history }) {
       
       const advertLoaded = getAdvert(getState(), advertId);
-      //console.log(advertLoaded);
+
       if (advertLoaded) {
         return;
       }
-      // dispatch(tweetsDetailRequest());
+      dispatch(advertsDetailRequest());
       try {
         const advert = await api.adverts.getAdvert(advertId);
         dispatch(advertsDetailSuccess(advert));
         return advert;
       } catch (error) {
-        // dispatch(tweetsDetailFailure(error));
+        dispatch(advertsDetailError(error));
       } 
     };
   };
@@ -157,7 +171,7 @@ export const advertsLoadedRequest = () => {
         const createdAdvert = await api.adverts.getAdvert(advertId);
         dispatch(advertsCreatedSuccess(createdAdvert));
         // redirect with history
-        //history.push('/');
+        history.push(`/adverts/${advertId}`)
         return createdAdvert;
       } catch (error) {
         dispatch(advertsCreatedError(error));
@@ -189,10 +203,10 @@ export const advertsLoadedRequest = () => {
     return async function (dispatch, getState, {api, history}) {
       dispatch(advertsDeletedRequest())
       try {
-        await api.adverts.deleteAdvert(advertId);
+        const deletedAdvert = await api.adverts.deleteAdvert(advertId);
         dispatch(advertsDeletedSuccess());
-        const { from } = history.location.state || { from: { pathname: '/' } };
-        history.replace(from);
+        history.push('/');
+        return deletedAdvert;
       } catch (error) {
         dispatch(advertsDeletedError(error));
       }

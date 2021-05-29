@@ -14,9 +14,7 @@ function NewAdvertPage({ history }) {
   const { error } = useSelector(getUi);
 
   const handleSubmit = newAdvert => {
-    dispatch(advertsCreateAction(newAdvert)).then(({ id }) =>
-      history.push(`/adverts/${id}`)
-    );
+    dispatch(advertsCreateAction(newAdvert));
   };
 
   if (error?.statusCode === 401) {

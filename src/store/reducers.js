@@ -11,6 +11,7 @@ import {
     ADVERTS_DELETED_SUCCESS,
     TAGS_LOADED_SUCCESS,
     TAGS_LOADED_REQUEST,
+    ADVERTS_DETAIL_REQUEST,
   } from './types';
   
   export const initialState = {
@@ -72,6 +73,7 @@ import {
       case ADVERTS_LOADED_REQUEST:
       case ADVERTS_CREATED_REQUEST:
       case ADVERTS_DELETED_REQUEST:
+      case ADVERTS_DETAIL_REQUEST:
       case TAGS_LOADED_REQUEST:
         return { ...state, loading: true, error: null };
       case AUTH_LOGIN_SUCCESS:
