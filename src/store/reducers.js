@@ -49,6 +49,10 @@ import {
       case ADVERTS_CREATED_SUCCESS:
       case ADVERTS_DETAIL_SUCCESS:
         return { ...state, loaded: false, data: [...state.data, action.payload] };
+      case ADVERTS_DELETED_SUCCESS:
+        const advertId= action.payload;
+        const arrayAfterRemoval = state.data.filter(advert => advert.id != advertId )
+        return {...state, loaded:false, data: arrayAfterRemoval};
       default:
         return state;
     }

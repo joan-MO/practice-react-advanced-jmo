@@ -185,9 +185,10 @@ export const advertsLoadedRequest = () => {
     };
   };
   
-  export const advertsDeletedSuccess = () => {
+  export const advertsDeletedSuccess = advertId => {
     return {
       type: ADVERTS_DELETED_SUCCESS,
+      payload: advertId,
     };
   };
   
@@ -203,10 +204,9 @@ export const advertsLoadedRequest = () => {
     return async function (dispatch, getState, {api, history}) {
       dispatch(advertsDeletedRequest())
       try {
-        const deletedAdvert = await api.adverts.deleteAdvert(advertId);
-        dispatch(advertsDeletedSuccess());
+        await api.adverts.deleteAdvert(advertId);
+        dispatch(advertsDeletedSuccess(advertId));
         history.push('/');
-        return deletedAdvert;
       } catch (error) {
         dispatch(advertsDeletedError(error));
       }
